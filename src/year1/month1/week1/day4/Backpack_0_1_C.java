@@ -2,7 +2,7 @@ package year1.month1.week1.day4;
 
 import java.util.Arrays;
 
-public class Backpack_0_1 {
+public class Backpack_0_1_C {
     public static void main(String[] args) {
         int[] weight = {1,3,4};
         int[] value = {15,20,30};
