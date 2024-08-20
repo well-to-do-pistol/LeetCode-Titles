@@ -29,7 +29,7 @@ class Solution_695 {
             for (int j=0; j<m; j++){
                 if (!visited[i][j] && grid[i][j]==1){
                     visited[i][j]=true;
-                    dfsA++;
+                    dfsA=1; //忘记更新dfsA值了
                     dfs(grid, visited, i, j);
                     max=Math.max(dfsA,max);
                 }
