@@ -4,52 +4,49 @@ import java.util.*;
 
 public class String_Concatenation_C {
     public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        int n=scanner.nextInt();
+        scanner.nextLine();
+        String[] strs = scanner.nextLine().split(" ");
+        List<String> wordList = new ArrayList<>();
+        for (int i=0; i<n; i++){
+            wordList.add(scanner.nextLine());
+        }
 
+        Solution_scc solutionScc = new Solution_scc();
+        int i=solutionScc.ladderLength(strs[0],strs[1],wordList);
+        System.out.println(i);
     }
 }
 class Solution_scc{
-    //广度优先遍历所有字串
-    //将符合要求的(只有一个不同)加入queue和path
-    //然后将包含终点的路径加入结果
-    //遍历结果找出长度最短
-    List<List<String>> result = new ArrayList<>();
-    List<String> path = new ArrayList<>();
-    public int stringConcate(String beginStr, String endStr, List<String> wordList){
+    //只用广度
+    //用当前str, 每个位置切换26个字母, 如果在set中找到而且visited找不到, 就加入队列
+    //用hashmap记录path, 第一个找到的一定是最短的
+    public int ladderLength(String beginStr, String endStr, List<String> wordList){
+        HashMap<String, Integer> map = new HashMap<>();
         Set<String> set = new HashSet<>(wordList);
-        set.add(endStr);
-
-        path.add(beginStr);
         Queue<String> queue = new ArrayDeque<>();
-        queue.add(beginStr);
+        map.put(beginStr, 1);
+        queue.offer(beginStr);
+        int len=beginStr.length();
 
-        while (!queue.isEmpty() && !set.isEmpty()){
+        while (!queue.isEmpty()){
             String cur = queue.poll();
-            for (String str : set){
-                if (compareM(cur, str)){
-                    path.add(str);
-                    set.remove(str);//移出set
-                    if (str.equals(endStr)){
-                        result.add(path);
+            int path = map.get(cur);
+            for (int i=0; i<len; i++){
+                char[] chars = cur.toCharArray();
+                for (char c = 'a'; c<='z'; c++){
+                    chars[i]=c;
+                    String newStr=new String(chars);
+                    if (newStr.equals(endStr))return path+1; //这里要换到外面来,因为end可能不在集合
+                    if (set.contains(newStr) && !map.containsKey(newStr)){
+//                        if (newStr.equals(endStr))return path+1;
+                        queue.add(newStr);
+                        map.put(newStr, path+1);
                     }
-                    path.remove(str);//回溯
                 }
             }
         }
-
-        int min=Integer.MAX_VALUE;
-        for (List<String> res : result){
-            min=Math.min(min, res.size());
-        }
-        return min==Integer.MAX_VALUE ? 0 : min;
+        return 0;
     }
-
-    private boolean compareM(String str1, String str2) {
-        int count =0;
-        for (int i=0; i<str1.length(); i++){
-            if (str1.charAt(i)==str2.charAt(i))count++;
-        }
-        return count==str1.length()-1;
-    }
-
-
 }
