@@ -12,19 +12,66 @@ class Solution_685 {
     //情况1:找入度为2的边, (如果有两条, 倒序从边集合找)
     //情况2:没有入度为2的边, 说明已经成环, 删去成环的那条边
 
+    //    1                    1
+    //   /  \                 /  \
+    //  2 -- 3          4 -- 2 -- 3
+
     int[] father;
+    int[] degree;
+    List<int[]> removes;
     public int[] findRedundantDirectedConnection(int[][] edges) {
         int n=edges.length;
-        father=new int[n+1];
-        initM(n);
+        degree = new int[n+1];
+        father = new int[n+1];
+        removes = new ArrayList<>();
 
-        for (int i=0; i<n; i++){
-            int u=edges[i][0];
-            int v=edges[i][1];
-            if (isSame(u,v))return new int[]{u,v};
-            join(u,v);
+        //计算入度
+        for (int[] edge:edges){
+            int t=edge[1];
+            degree[t]++;
+        }
+
+        //从后向前遍历
+        for (int i=n-1; i>=0; i--){
+            int s=edges[i][0];
+            int t=edges[i][1];
+            if (degree[t]==2){
+                removes.add(new int[]{s,t});
+            }
+        }
+
+        //三种情况
+        if (!removes.isEmpty()){
+            if (tree_after_remove(edges, removes.get(0))){
+                return new int[]{removes.get(0)[0], removes.get(0)[1]};
+            }else {
+                return new int[]{removes.get(1)[0], removes.get(1)[1]};
+            }
+        }else {
+            return no_degree_circle(edges);
+        }
+    }
+
+    private int[] no_degree_circle(int[][] edges) {
+        initM(edges.length);//每次都要初始化
+        for (int[] edge:edges){
+            int s=edge[0];
+            int t=edge[1];
+            if (isSame(s,t))return new int[]{s,t};
+            join(s,t);
         }
         return null;
+    }
+
+    private boolean tree_after_remove(int[][] edges, int[] remove) {
+        initM(edges.length); //每次都要初始化
+        for (int[] edge:edges){
+            int s=edge[0];
+            int t=edge[1];
+            if (s==remove[0] && t==remove[1])continue;
+            join(s,t);
+        }
+        return isSame(remove[0],remove[1]);
     }
 
     private void initM(int n) {
