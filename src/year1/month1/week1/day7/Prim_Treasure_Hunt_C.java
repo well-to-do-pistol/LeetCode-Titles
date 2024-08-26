@@ -3,7 +3,7 @@ package year1.month1.week1.day7;
 import java.util.Arrays;
 import java.util.Scanner;
 
-public class Treasure_Hunt_C {
+public class Prim_Treasure_Hunt_C {
     //1.找到最近节点
     //2.加入树
     //3.更新最短距离
@@ -27,6 +27,7 @@ public class Treasure_Hunt_C {
 
         int[] minList=new int[v+1];
         boolean[] tree = new boolean[v+1];
+        int[] edges = new int[v+1];
         Arrays.fill(minList,10001);
 
         for (int i=1; i<=v; i++){ //其实不用遍历到最后一个的,因为最后一个的最短距离早在前一个确定后就生成了
@@ -48,6 +49,8 @@ public class Treasure_Hunt_C {
             for (int k=1; k<=v; k++){
                 if (!tree[k] && grid[cur][k]<minList[k]){
                     minList[k]=grid[cur][k];
+
+                    edges[k]=cur; //保存边, 不能用cur作索引防止相同的cur被覆盖
                 }
             }
         }
@@ -57,6 +60,9 @@ public class Treasure_Hunt_C {
             res+=minList[i];
         }
         System.out.println(res);
+        for (int i=1; i<=v; i++){
+            System.out.println(i+"->"+edges[v]);
+        }
         scanner.close();
     }
 }
