@@ -1,3 +1,4 @@
+year.month1.week1.day7
 一.连接图所有节点最短路径
 1.Prim (minList记录距离最小生成树最短长度)
 2.Kruskal (稀疏图, 边排序后用并查集)
@@ -5,4 +6,7 @@
 二.两点之间最短路径
 1.Dijkstra (朴素, minList记录距离源点最短长度)
 2.Dijkstra (稀疏图, 用优先队列排序边, 用领接表表示图)
-3.Bellman_Ford (适用有负数的情况, 动态规划, n-1次松弛(更新minList))
+3.Bellman_Ford (适用有负数的情况, 动态规划, n-1次松弛(更新minList))(无负权回路)
+3.Bellman_Ford_Queue_Improved_SPFA (适用有负数的情况, 动态规划, 只对上一次松弛的点连接的边松弛, 用队列记录点并用boolean[]记录该点已进队列)(无负权回路)
+4.Bellman_Ford_II (用最基础的Bellman_Ford和队列优化的都可以, 第n次松弛或者在第n次添加节点时, 判断minList是否有变来找出负权回路)(有负权回路)
+5.Bellman_Ford_Limited_k (限定经过k点, 使用preMinList对所有边松弛k+1次)(有负权回路)
