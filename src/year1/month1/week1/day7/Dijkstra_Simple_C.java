@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.Scanner;
 
 public class Dijkstra_Simple_C {
+    //有重大瑕疵: 图必须完全连通(必须有从起点到终点的n-1条路径, 没有就报错)
     //minList表示距离源点的最短距离
     //和Prim差不多
     //但是Prim是无向图, 这里Dijkstra是有向图, 只能定义单方向的权值
