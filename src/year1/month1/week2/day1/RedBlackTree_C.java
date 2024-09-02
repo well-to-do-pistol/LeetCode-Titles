@@ -2,6 +2,8 @@ package year1.month1.week2.day1;
 
 import com.sun.org.apache.bcel.internal.generic.ARETURN;
 
+import java.util.Stack;
+
 public class RedBlackTree_C {
     private static final boolean isMultiMap=false;
     enum Flag{
@@ -50,9 +52,8 @@ public class RedBlackTree_C {
 
     //连接父子关系, dir为true则为左
     void link(Node s, Node t, boolean dir){
+        if (t!=null)t.fa=s;    //就算t为空也不能返回,先连上.注意!!!这句一定要在最前面,有父先确定父子
         if (s==null || s==t)return;
-
-        if (t!=null)t.fa=s;    //就算t为空也不能返回,先连上
         if (dir)
             s.left=t;
         else
@@ -110,6 +111,7 @@ public class RedBlackTree_C {
         }
     }
     void adjust(Node node){
+        if (root==null || node==null || root==node)return; //adjust会递归,一定要有边界判断
         Node p=node.fa;
         if (p==root)   //1.父根,黑
             p.flag=Flag.BLACK;
@@ -145,5 +147,141 @@ public class RedBlackTree_C {
         Node node=find(root,val);
         if (!isMultiMap && node!=null)return;
         insert(new Node(val));
+    }
+    //----------------------------------------------------------------------------------------------------
+    Node getMin(Node node){
+        while (node.left!=null){
+            node=node.left;
+        }
+        return node;
+    }
+    void changeColor(Node a,Node b){
+        Flag temp = a.flag;
+        a.flag=b.flag;
+        b.flag=temp;
+    }
+    void deleteAdjust(Node node){
+        if (node==null || node==root)return; //边界
+        if (node.flag==Flag.RED){            //1.红节点直接删除
+            return;
+        }
+
+        Node p=node.fa;
+        boolean dir=node==p.left;
+        Node b=dir? p.right : p.left; //bro节点
+
+        if (b.flag==Flag.RED){               //2.兄弟为红, pb互换,p向D(删除节点)转
+            changeColor(p,b);
+            linkReplace(p,b);                //b顶掉p
+            link(p,dir? b.left:b.right, !dir);//如果dir,b在右,左旋(新根左放旧根右)
+            link(b,p,dir);                   //如果dir,b在右,那p放会b的左
+            deleteAdjust(node);              //继续递归
+            return;
+        }
+
+        Node broLeft=b.left;
+        Node broRight=b.right;
+
+        if (broLeft!=null && broLeft.flag==Flag.RED || broRight!=null && broRight.flag==Flag.RED){ //3.兄弟黑,至少有一个红孩
+            if (dir){    //兄在右
+                if (broLeft!=null && broLeft.flag==Flag.RED){ //左孩红或全红, r变p,p变黑,RL
+                    broLeft.flag=p.flag;
+                    p.flag=Flag.BLACK;
+                    rotateRL(p);
+                }else {   //其他情况, bp互换, r变黑, RR
+                    changeColor(b,p);
+                    if (broLeft != null) {
+                        broLeft.flag=Flag.BLACK;
+                    }
+                    rotateRR(p);
+                }
+            }else {      //兄在左
+                if (broRight!=null && broRight.flag==Flag.RED){ //右孩红或全红, r变p,p变黑,LR
+                    broRight.flag=p.flag;
+                    p.flag=Flag.BLACK;
+                    rotateLR(p);
+                }else {   //其他情况,bp互换,r变黑,LL
+                    changeColor(b,p);
+                    if (broRight!=null){
+                        broRight.flag=Flag.BLACK;
+                    }
+                    rotateLL(p);
+                }
+            }
+        }else { //兄弟无红孩, D变红, 递交b进行递归
+            node.flag=Flag.RED;
+            deleteAdjust(p);
+        }
+    }
+    void delete(Node node){ //1.无孩调整删;2.单孩替换递归;3.双孩找后继递归
+        if (node==null || root==null)return;
+        if (node.left==null && node.right==null){
+            deleteAdjust(node);
+            linkReplace(node,null);
+            return;                      //删除叶子节点,根不用作调整,有孩子的情况会在删除(叶子)之后作调整
+        } else if (node.left!=null && node.right!=null) { //双孩找后继递归
+            Node next=getMin(node.right);
+            node.val=next.val;
+            delete(next);
+        }else {                         //单孩替换递归
+            Node next=node.left==null? node.right : node.left;
+            node.val=next.val;
+            delete(next);
+        }
+        while (root.fa!=null)root=root.fa;//root可能被旋下来,一直往上更新根
+    }
+    //----------------------------------------------------------------------------------------------------
+    void inOrder(){ //用cur记录一直向左的点(包括根),直到没有就pop,然后再找右(替换为cur),继续重复
+        if (root==null)return;
+        Stack<Node> stack = new Stack<>();
+        Node cur=root;
+        while (cur!=null || !stack.isEmpty()){
+            if (cur!=null){
+                stack.push(cur);
+                cur=cur.left;
+            }else {
+                Node temp=stack.pop();
+                System.out.print(temp.val+" ");
+                if (temp.right!=null)cur=temp.right;
+            }
+        }
+        System.out.println();
+    }
+    private void printHelper(Node root, String indent, boolean last) {
+        if (root != null) {
+            System.out.print(indent);
+            if (last) {
+                System.out.print("R----");
+                indent += "   ";
+            } else {
+                System.out.print("L----");
+                indent += "|  ";
+            }
+
+            String sColor = root.flag == Flag.RED ? "RED" : "BLACK";
+            System.out.println(root.val + "(" + sColor + ")");
+            printHelper(root.left, indent, false);
+            printHelper(root.right, indent, true);
+        }
+    }
+    public void printTree() {
+        if (root != null) {
+            printHelper(root, "", true);
+        }
+    }
+
+    public static void main(String[] args) {
+        RedBlackTree_C tree = new RedBlackTree_C();
+        tree.insert(-10);
+        tree.insert(-3);
+        tree.insert(0);
+        tree.insert(5);
+        tree.insert(9);
+        tree.inOrder();
+        tree.printTree();
+        tree.delete(tree.find(tree.root, -3));
+        tree.inOrder();
+        tree.delete(tree.find(tree.root, 0));
+        tree.inOrder();
     }
 }
