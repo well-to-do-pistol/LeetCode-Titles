@@ -218,7 +218,7 @@ public class RedBlackTree_C {
         if (node.left==null && node.right==null){
             deleteAdjust(node);
             linkReplace(node,null);
-            return;                      //删除叶子节点,根不用作调整,有孩子的情况会在删除(叶子)之后作调整
+//            return;                      //删除叶子节点,根不用作调整,有孩子的情况会在删除(叶子)之后作调整
         } else if (node.left!=null && node.right!=null) { //双孩找后继递归
             Node next=getMin(node.right);
             node.val=next.val;
@@ -280,7 +280,9 @@ public class RedBlackTree_C {
         tree.inOrder();
         tree.printTree();
         tree.delete(tree.find(tree.root, -3));
+        tree.delete(tree.find(tree.root, -10));
         tree.inOrder();
+        tree.printTree();
         tree.delete(tree.find(tree.root, 0));
         tree.inOrder();
     }
