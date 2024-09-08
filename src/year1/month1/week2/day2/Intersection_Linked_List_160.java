@@ -19,6 +19,7 @@ class ListNode {
         val = x;
         next = null;
     }
+    ListNode(int val, ListNode next) { this.val = val; this.next = next; }
 }
 class Solution_160 {
     //简便写法
