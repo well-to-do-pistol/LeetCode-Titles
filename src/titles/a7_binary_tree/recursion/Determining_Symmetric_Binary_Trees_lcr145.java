@@ -27,7 +27,7 @@ public class Determining_Symmetric_Binary_Trees_lcr145 {
 
 //迭代
 //把节点都加进队列, 前后节点一定相同(也是栈和队列都可以, 注意不要用ArrayDeque不允许空值)
-class Solution {
+class Solution_lcr145 {
     public boolean checkSymmetricTree(TreeNode root) {
         //1. 先判断
         // if(root==null)return true;
