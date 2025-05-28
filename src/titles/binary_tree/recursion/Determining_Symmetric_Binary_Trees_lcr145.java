@@ -4,15 +4,11 @@ import java.util.*;
 
 public class Determining_Symmetric_Binary_Trees_lcr145 {
 }
-//递归
+// 1. 递归, 将检查变成A树的左树和B树的右树的检查, 以及A树的右树和B树的左树的检查, 一开始判断一下传入两个子树
 // class Solution {
 //     public boolean checkSymmetricTree(TreeNode root) {
-//         //1. 先判断
-//         // if(root==null)return true;
-//         // return check(root.left,root.right);
-
-//         //2. 直接传root
-//         return check(root,root);
+//          if(root==null)return true;
+//          return check(root.left,root.right);
 //     }
 //     public boolean check(TreeNode A, TreeNode B){
 //         if(A==null && B==null){
@@ -25,16 +21,13 @@ public class Determining_Symmetric_Binary_Trees_lcr145 {
 //     }
 // }
 
-//迭代
-//把节点都加进队列, 前后节点一定相同(也是栈和队列都可以, 注意不要用ArrayDeque不允许空值)
+// 2. 迭代, 和翻转差不多: 栈和队列都可以, 先加入A的左和B的右, 再加入A的右和B的左, 一开始加入root的左右
+// 每次弹出两个节点(相当于遍历所有节点, 和翻转一样逐点观察是否不对称), 然后再加入四个节点
+// 这里可以加空(ArrayDeque不可以加空), 翻转不可以
 class Solution_lcr145 {
     public boolean checkSymmetricTree(TreeNode root) {
-        //1. 先判断
-        // if(root==null)return true;
-        // return check(root.left,root.right);
-
-        //2. 直接传root
-        return check(root,root);
+        if(root==null)return true;
+        return check(root.left,root.right);
     }
     public boolean check(TreeNode u, TreeNode v){
         Stack<TreeNode> stack = new Stack<>();

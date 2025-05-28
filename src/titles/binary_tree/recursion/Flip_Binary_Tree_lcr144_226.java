@@ -2,7 +2,7 @@ package titles.binary_tree.recursion;
 
 import java.util.*;
 
-public class Flip_Binary_Tree_lcr144 {
+public class Flip_Binary_Tree_lcr144_226 {
 }
 
 //递归
@@ -16,7 +16,7 @@ public class Flip_Binary_Tree_lcr144 {
 //     }
 // }
 
-// 栈和队列都行(无关弹出顺序), 直接将所有节点添加(无需关注层数), 当前节点左右子节点互换
+// 栈和队列都行(无关弹出顺序), 直接将所有节点添加(无需关注层数), 层序遍历, 遍历到的所有节点用tmp将左右节点互换
 class Solution_lcr144 {
     public TreeNode flipTree(TreeNode root) {
         if(root==null)return null;
