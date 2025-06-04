@@ -1,4 +1,4 @@
-package titles.stacks_and_queues.stacks;
+package titles.stacks_and_queues.stacks.monotonic_stack.hard;
 import java.util.*;
 public class Daily_Temperatures_739 {
 }

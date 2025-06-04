@@ -1,4 +1,4 @@
-package titles.stacks_and_queues.stacks.hard;
+package titles.stacks_and_queues.stacks.monotonic_stack.hard;
 import java.util.*;
 public class Largest_Rectangle_Area_84 {
 }
