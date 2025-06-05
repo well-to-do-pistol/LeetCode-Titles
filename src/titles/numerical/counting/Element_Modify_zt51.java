@@ -1,4 +1,4 @@
-package titles.other.counting;
+package titles.numerical.counting;
 import java.util.*;
 import java.io.*;
 // 一个比lBound小的数会增加lOver和rBal的值, 所以最好有小于出界的数和大于出界的数两两匹配. 但结果等于lOver和rOver的最大值因为使用最佳的两两匹配绝对能配完较小值, 剩下的次数就是给最大值了.

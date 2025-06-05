@@ -4,7 +4,7 @@ import java.util.*;
 
 public class Anagram_Grouping_49 {
 }
-class Solution {
+class Solution_49 {
     // 1. 排序(字符数组)作为键
     public List<List<String>> groupAnagrams(String[] strs) {
         HashMap<String,List<String>> map = new HashMap<>();

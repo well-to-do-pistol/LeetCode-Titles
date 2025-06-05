@@ -1,4 +1,4 @@
-package titles.binary_search;
+package titles.two_pointers.binary_search;
 
 public class Count_The_Frequency_Of_Occurrence_Of_Target_Scores_lcr172 {
 }

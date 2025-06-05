@@ -1,4 +1,4 @@
-package titles.binary_search;
+package titles.two_pointers.binary_search;
 
 public class Search_For_The_First_And_Last_Position_In_Array_34 {
 }

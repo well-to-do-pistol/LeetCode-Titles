@@ -1,4 +1,4 @@
-package titles.large_numbers;
+package titles.numerical.large_numbers;
 
 public class Large_Number_Addition_415 {
 }

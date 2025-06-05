@@ -1,4 +1,4 @@
-package titles.binary_search;
+package titles.two_pointers.binary_search;
 
 public class Search_For_Rotate_Array_33 {
 }

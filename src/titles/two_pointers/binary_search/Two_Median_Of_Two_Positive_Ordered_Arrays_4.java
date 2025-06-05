@@ -1,4 +1,4 @@
-package titles.binary_search;
+package titles.two_pointers.binary_search;
 
 public class Two_Median_Of_Two_Positive_Ordered_Arrays_4 {
 }

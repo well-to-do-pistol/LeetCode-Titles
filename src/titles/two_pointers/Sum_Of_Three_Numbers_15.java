@@ -5,9 +5,9 @@ import java.util.*;
 public class Sum_Of_Three_Numbers_15 {
 }
 class Solution_15 {
-    //先用一层for, 再用双指针法(同时运用 low和high的和 与 x 进行比较来移动指针)
-    //禁止第一个数出现重复
-    //得到结果后, 禁止第二个数和第三个数出现重复
+    // 注意i要去重，
+    // 得到新结果，还是要继续遍历，因为i已经定了，继续遍历要先去重而且用while
+    // Arrays.asList
     public List<List<Integer>> threeSum(int[] nums) {
         int len=nums.length;
         List<List<Integer>> res = new ArrayList<>();

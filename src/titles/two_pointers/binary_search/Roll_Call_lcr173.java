@@ -1,4 +1,4 @@
-package titles.binary_search;
+package titles.two_pointers.binary_search;
 
 public class Roll_Call_lcr173 {
 }
