@@ -12,13 +12,13 @@ class Solution_560 {
     // pre为8, k为8, 结果就加上pre为0的个数
     // pre为8, k为7, 结果就加上pre为1的个数
     public int subarraySum(int[] nums, int k) {
-        int pre=0, n=nums.length, count=0;
-        HashMap<Integer, Integer> map = new HashMap<>();
-        map.put(0,1);
-        for(int i=0; i<n; ++i){
-            pre+=nums[i];
-            if(map.containsKey(pre-k))count+=map.get(pre-k);
-            map.put(pre,map.getOrDefault(pre,0)+1);
+        int sum = 0, count = 0;
+        HashMap<Integer,Integer> map = new HashMap<>();
+        map.put(0,1);             // 一定要put(0,1)
+        for (int num : nums){
+            sum+=num;
+            count+=map.getOrDefault(sum-k,0);
+            map.put(sum,map.getOrDefault(sum,0)+1);
         }
         return count;
     }
