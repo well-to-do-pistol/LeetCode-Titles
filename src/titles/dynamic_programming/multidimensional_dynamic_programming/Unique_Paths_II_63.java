@@ -1,4 +1,4 @@
-package titles.dynamic_programming.variants_normal;
+package titles.dynamic_programming.multidimensional_dynamic_programming;
 
 public class Unique_Paths_II_63 {
 }
