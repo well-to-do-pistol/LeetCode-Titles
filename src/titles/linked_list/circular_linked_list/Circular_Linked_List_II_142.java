@@ -1,9 +1,17 @@
-package titles.linked_list;
+package titles.linked_list.circular_linked_list;
 
-import java.util.*;
 
 public class Circular_Linked_List_II_142 {
 }
+class ListNode {
+    int val;
+    ListNode next;
+    ListNode(int x) {
+        val = x;
+        next = null;
+    }
+}
+
 
 class Solution_142 {
 
