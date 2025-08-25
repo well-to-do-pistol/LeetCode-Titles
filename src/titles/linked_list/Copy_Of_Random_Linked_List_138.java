@@ -19,27 +19,26 @@ class Node {
 class Solution_138 {
 
     // O(1)空间复杂度. 3次for循环
-    // 第一次: 制造head的影子1->1'
-    // 第二次: 利用newNode.random =  node.random.next来顺利获得random
-    // 第三次: 分开影子
+    // A->B->C变成A->A'->B->B'->C->C'
+    // 利用A的next获得影子节点，这样就获得影子的random
+    // 断开（直接连一遍，注意有空节点，报错就打印看看谁有null，分析原因）
     public Node copyRandomList(Node head) {
-        if(head==null) return null;
-        for(Node node=head; node!=null; node=node.next.next){
-            Node newNode = new Node(node.val);
-            newNode.next = node.next;
-            node.next = newNode;
+        if (head==null) return null;
+        for (Node node=head; node!=null; node=node.next.next) {
+            Node tmp = node.next;
+            node.next = new Node(node.val);
+            node.next.next = tmp;
         }
-        for(Node node=head; node!=null; node=node.next.next){
-            node.next.random = node.random==null ? null : node.random.next;
+        for (Node node=head; node!=null; node=node.next.next) {
+            node.next.random = node.random == null ? null : node.random.next;
         }
-        Node newHead = head.next;
-        for(Node node=head; node!=null; ){
-            Node newNode = node.next;
-            node.next = newNode.next;     // 需要在newNode.next变之前获得
-            newNode.next = newNode.next==null ? null : newNode.next.next;
-            node = node.next;            // node是等于node.next不是newNode.next, newNode.next已经变了
+        Node res = head.next;
+        for (Node node=head; node!=null; node=node.next) {
+            Node tmp = node.next;                  // A'
+            node.next = node.next.next;            // A连B
+            tmp.next = node.next == null ? null : node.next.next;             // node.next可能等于null, A'连B'
         }
-        return newHead;
+        return res;
     }
 
 //    //O(n)空间复杂度. 用哈希表记录原来点与复制点之间的对应关系

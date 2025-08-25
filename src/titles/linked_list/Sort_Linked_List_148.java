@@ -8,54 +8,51 @@ public class Sort_Linked_List_148 {
 class Solution_148 {
 
     // 1. 自底向上归并排序(迭代), 时间复杂度O(nlogn), 空间复杂度O(1)
-    // 先计算链表长度, 子数组长度为x=1开始, x*=2, 直到大于链表长度
-    // 每次合并两个长度为x的子链表, 一直合并到终点, 然后长度*2继续
-    // 注意要设dummyH, pre, cur(每次更新了长度都要重置), next; 注意每次链表的断开以及pre和cur的更新
-    // for循环遍历子链的时候要注意判空
-    // 就算左边是123, 右边是4=h2, 依旧要
+    // 先写出两个有序链表的合并
+    // 然后用迭代自底向上的方法，从1-1合并成2，到2-2合并成4，一直合并
+    // 需要记录pre cur h1 h2 next
+    // h1和h2都要和后面的断开，用pre和next（next用来实时更新cur）进行重新连接，cur是用来遍历的
     public ListNode sortList(ListNode head) {
-        if(head==null) return null;
         int len = 0;
-        for(ListNode cur=head; cur!=null; cur=cur.next)++len;
-        ListNode dummyH = new ListNode(-1);
-        dummyH.next=head;
-        for(int subLen=1; subLen<len; subLen<<=1){
-            ListNode pre=dummyH, cur=dummyH.next, h1, h2, next;  //head可能已经不在第二位了
-            while(cur!=null){
+        for (ListNode node=head; node!=null; node=node.next) ++len;
+        ListNode dummyHead = new ListNode(Integer.MIN_VALUE,head), pre, cur, h1, h2, next;
+        for (int subLen=1; subLen<len; subLen<<=1) {
+            pre =dummyHead; cur=dummyHead.next;
+            while (cur!=null) {
                 h1=cur;
-                for(int i=1; i<subLen && cur.next!=null; ++i)cur=cur.next;
+                for (int i=1; i<subLen && cur.next!=null; ++i) cur = cur.next;
                 h2=cur.next;
-                cur.next=null;
-                cur=h2;                             //要把cur跳到h2
-                for(int i=1; i<subLen && cur!=null && cur.next!=null; ++i)cur=cur.next;
-                next=null;                          //cur是有可能等于null的, 当长度为1, 但是只有左子链有1个元素的时候
-                if(cur!=null){
-                    next=cur.next;
-                    cur.next=null;
+                cur.next=null;         // 断开h1与h2
+                cur = h2;              // cur.next变成了null，cur要变回h2
+                for (int i=1; i<subLen && cur!=null && cur.next!=null; ++i) cur = cur.next;
+                if (cur!=null) {
+                    next = cur.next;
+                    cur.next = null;   // 断开h2与后续
+                } else {
+                    next = null;       // 如果cur没有了，next也要置为null，否则就无限循环了
                 }
-                pre.next=mergeSort(h1,h2);
-                while(pre.next!=null) pre=pre.next; //必须遍历到下一pre
-                cur=next;
+                pre.next = merge(h1,h2);
+                while (pre.next!=null) pre=pre.next;    //  更新pre
+                cur = next;                             //  更新cur
             }
         }
-        return dummyH.next;
+        return dummyHead.next;
     }
 
-    private ListNode mergeSort(ListNode l1, ListNode l2){
-        ListNode dummyH = new ListNode(-1);
-        ListNode cur = dummyH;
-        while(l1!=null && l2!=null){
-            if(l1.val <= l2.val){
-                cur.next = l1;
-                l1 = l1.next;
-            }else{
-                cur.next = l2;
-                l2 = l2.next;
+    private ListNode merge(ListNode h1, ListNode h2) {   // 排序不用新建节点啊
+        ListNode dummyHead = new ListNode(Integer.MIN_VALUE), cur = dummyHead;
+        while (h1!=null && h2!=null) {
+            if (h1.val <= h2.val) {
+                cur.next = h1;
+                h1 = h1.next;
+            } else {
+                cur.next = h2;
+                h2 = h2.next;
             }
             cur = cur.next;
         }
-        cur.next = l1==null ? l2 : l1;
-        return dummyH.next;
+        cur.next = h1==null ? h2 : h1;
+        return dummyHead.next;
     }
 
 

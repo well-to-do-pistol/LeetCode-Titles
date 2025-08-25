@@ -4,39 +4,30 @@ public class Divide_29 {
 }
 class Solution_29 {
     // 1. 最好的方法：
-    // 先判断边界：被除数为最小整数，除数为-1，返回最大整数
-    // 因为正负号，我们要将所有数统一符号，负数表示范围广所以是负数
-    // 创建循环，判断是否大于等于0xc0000000（为-(1<<30),0x80000000为Integer.MIN_VALUE）
-    // 例子15/2
-    // 减8算出4，减4算出2，减2算出1，答案为4+2+1=7
+    // 防止溢出，（负数变正）
+    // 两层循环，适用于所有情况，例如30/4，内部循环翻倍到16；一减得到14，再循环，内部循环翻倍到8
+    // 正数要转换成负数
+    // 内层翻倍要防止超过最小值的一半，超过就只能返回res了quotient
     public int divide(int dividend, int divisor) {
-        if (dividend==Integer.MIN_VALUE && divisor==-1)return Integer.MAX_VALUE;
-        int negative = 2;
-        if (dividend > 0){
-            dividend = -dividend;
-            --negative;
-        }
-        if (divisor > 0){
-            divisor = -divisor;
-            --negative;
-        }
-        int res = divideCore(dividend,divisor);
-        return negative == 1 ? -res : res;
-    }
+        if (dividend==Integer.MIN_VALUE && divisor==-1)
+            return Integer.MAX_VALUE;
 
-    private int divideCore(int dividend, int divisor){
-        int res = 0;
-        while(dividend<=divisor){
-            int val = divisor;
+        boolean isNegative = (dividend>0) ^ (divisor>0);
+        dividend = dividend>0 ? -dividend : dividend;
+        divisor = divisor>0 ? -divisor : divisor;
+        int res=0;
+        while (dividend<=divisor) {
             int quotient = 1;
-            while(val >= 0xc0000000 && dividend <= val+val){
+            int val = divisor;
+            while (val>=Integer.MIN_VALUE/2 && dividend<=val+val) {
                 val+=val;
                 quotient+=quotient;
             }
-            res+=quotient;
             dividend-=val;
+            res+=quotient;
         }
-        return res;
+
+        return isNegative ? -res : res;
     }
 }
 

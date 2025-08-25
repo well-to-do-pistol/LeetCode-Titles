@@ -6,25 +6,26 @@ public class Rotate_Images_48 {
 }
 
 class Solution_48 {
-
-    // a[i][j] = a[j][n-1-i];             第一行转移到最后一列
-    // a[j][n-1-i] = a[n-1-i][n-1-j];     最后一列转移到最后一行
-    // a[n-1-i][n-1-j] = a[n-1-j][i];     最后一行转移到第一列
-    // a[n-1-j][i] = a[i][j];             第一列转移到第一行
-    // 等式索引规律: 交换索引然后n-1-第二个索引值
-    // 最后更新映射关系即为转移关系的颠倒
-    // 只需遍历左上角(奇数需要少遍历一行)
+    // 第一行第一列变成第一行第三列
+    // 第一行第二列变成第二行第三列，证明先交换行拿列原值，列拿n-1去减原行值
+    // a[i][j] -> a[j][n-i-1]
+    // a[j][n-i-1] -> a[n-i-1][n-j-1]
+    // a[n-i-1][n-j-1] -> a[n-j-1][i]
+    // a[n-j-1][i] -> a[i][j]
+    // 只需遍历左上角，奇数少遍历一行（列是n/2+1），所以9宫格只需遍历1，2
+    // (n+1)/2，就不用%2来判断啦
+    // 注意倒着来
     public void rotate(int[][] matrix) {
         int n=matrix.length;
-        int col = (n+1)/2-1;
-        int row = n/2-1;
-        for(int i=0; i<=row; ++i){
-            for(int j=0; j<=col; ++j){
+        int col = (n+1)/2;
+        int row = n/2;
+        for (int i=0; i<row; ++i) {
+            for (int j=0; j<col; ++j) {
                 int tmp = matrix[i][j];
-                matrix[i][j] = matrix[n-1-j][i];
-                matrix[n-1-j][i] = matrix[n-1-i][n-1-j];
-                matrix[n-1-i][n-1-j] = matrix[j][n-1-i];
-                matrix[j][n-1-i] = tmp;
+                matrix[i][j] = matrix[n-j-1][i];
+                matrix[n-j-1][i] = matrix[n-i-1][n-j-1];
+                matrix[n-i-1][n-j-1] = matrix[j][n-i-1];
+                matrix[j][n-i-1] = tmp;
             }
         }
     }
