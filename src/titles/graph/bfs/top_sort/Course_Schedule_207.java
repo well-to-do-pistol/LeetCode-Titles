@@ -1,40 +1,46 @@
+package titles.graph.bfs.top_sort;
+
 import java.util.*;
 
 
 class Solution_207 {
     // 拓扑排序是依赖优先排序，不是按数值排的，无环是充要条件
     // 只要有依赖关系，优先考虑拓扑排序
-    // 1. 找出所有入度为0的点
-    // 2. 遍历入度为0的点，所有其终端点的入度--，如果入度变0,再加入队列
-    // 3. 最后计算减去的所有点是否等于图中所有点，证明无环与否
+
+    // 判断有无环，并查集是无向，这里是有向要用拓扑
+    // 如果是2门课程，索引就是0到1
+    // 首先构建图（List<List<>>，起点作为索引，终点作为数组里的值）
+    // 然后用数组记录入度
+    // 遍历数组，将入度为0（就是所有起点加队列）
+    // 遍历队列，减去入度，如果入度为0则加进队列并删除总数++
     public boolean canFinish(int numCourses, int[][] prerequisites) {
-        int[] degree = new int[numCourses];
         List<List<Integer>> graph = new ArrayList<>();
-        Queue<Integer> queue = new LinkedList<>();
-        int count = 0;
-        for (int i=0; i<numCourses; ++i){
+        int[] enterCounts = new int[numCourses];
+        for (int i=0; i<numCourses; ++i) {
             graph.add(new ArrayList<>());
         }
-        for (int[] prere : prerequisites){
-            int s = prere[1];        // s是第二个， t是第一个
-            int t = prere[0];
+        for (int[] pre : prerequisites) {
+            int t = pre[0];
+            int s = pre[1];
             graph.get(s).add(t);
-            ++degree[t];
+            ++enterCounts[t];
         }
-        for (int i=0; i<numCourses; ++i){
-            if (degree[i]==0){
+        Queue<Integer> queue = new LinkedList<>();
+        for (int i=0; i<numCourses; ++i) {
+            if (enterCounts[i]==0) {
                 queue.add(i);
             }
         }
-        while(!queue.isEmpty()){
+        int deleteCount = 0;
+        while (!queue.isEmpty()) {
             int cur = queue.poll();
-            ++count;
-            for(int i : graph.get(cur)){
-                if (--degree[i] == 0){
-                    queue.add(i);  // 加入i不是cur
+            ++deleteCount;
+            for (int tmp : graph.get(cur)) {
+                if (--enterCounts[tmp]==0) {
+                    queue.offer(tmp);
                 }
             }
         }
-        return count == numCourses;
+        return deleteCount==numCourses;
     }
 }
