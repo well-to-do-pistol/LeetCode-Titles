@@ -7,30 +7,35 @@ public class K_Sets_Of_Reversed_Linked_Lists_25 {
 
 class Solution_25 {
 
-    // 0. 目前就用这种写法
-    // 用head和tail
+    // 0.现在用这个方法
+    // 一遇到k什么，就要考虑归并排序了，这里不是归并，这里用迭代法
+    // 记录pre，cur，next
+    // 写好反转函数
+    // 1.保持拼接； 2.不够长的跳过
     public ListNode reverseKGroup(ListNode head, int k) {
-        ListNode dummyHead = new ListNode(-1,head), cur = dummyHead;
-        while (cur.next!=null) {
-            ListNode head0 = cur, tail0 = cur.next;
-            for (int i=k; cur!=null && i>0; --i) {
+        ListNode dummpyHead = new ListNode(-1,head), pre=dummpyHead, cur = pre.next;
+        while (cur!=null) {
+            cur = pre.next;
+            int i = k;
+            for (; i>0 && cur!=null; --i) {
                 cur = cur.next;
             }
-            if (cur==null) break;
-            ListNode tmp = cur.next;
-            head0.next = reverse(tail0,cur.next);     // cur是3
-            tail0.next = tmp;                    // head0是d，tail0是1，cur.next会变成null所以要先记录
-            cur = tail0;
+            if (i!=0) break;             // 但是如果刚刚好cur==null，而且要反转，要考虑
+            ListNode nextPre = pre.next;
+            pre.next = reverse(pre.next,cur);
+            nextPre.next = cur;
+            pre = nextPre;
         }
-        return dummyHead.next;
+        return dummpyHead.next;
     }
-    private ListNode reverse(ListNode head, ListNode tail) {
+
+    private ListNode reverse(ListNode start, ListNode end) {
         ListNode pre = null;
-        while (head!=tail) {
-            ListNode tmp = head.next;
-            head.next = pre;
-            pre = head;
-            head = tmp;
+        while(start!=end) {
+            ListNode tmp = start.next;
+            start.next = pre;
+            pre = start;
+            start = tmp;
         }
         return pre;
     }

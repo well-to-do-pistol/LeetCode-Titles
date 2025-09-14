@@ -10,19 +10,21 @@ class Solution_300 {
     /**
      动态规划，较慢
      */
-    // 递推公式基于第二层循环的dp[j]，即我们认为dp[j]已经计算出来，只需要将nums[j]与nums[i]对比即可算出dp[i]=dp[j]+1
-    // dp[i]为考虑到i索引数字的最长递增子序列
-    // 两层for循环，第一层遍历i，第二层遍历i之间的数j
-    // 如果j<i，那么就可以用dp[j]+1来得到dp[i]，即
-    // dp[i] = Math.max(dp[i],dp[j]+1)
-    // dp所有初始化为1，每轮第二层循环完后，用dp[i]的值更新最大值，因为结果可能出现在任何为i结尾的序列
+    // dp[i]代表以nums[i]结尾的最长递增子序列个数
+    // 全部初始化为1，最后遍历取最大值
+    // 大于：dp[i] = dp[i-1]+1
+
+    // 传统遍历肯定不行，我们要先遍历以i为结尾，算出最大的dp[i]
+    // 里面再加一层循环，遍历i之前的所有数j，因为i之前的dp都算出来了
+    // 如果nums[j]>nums[i], dp[i] = Math.max(dp[i],dp[j]+1)
+    // 在第一层里取最大max
     public int lengthOfLIS(int[] nums) {
         int[] dp = new int[nums.length];
         Arrays.fill(dp,1);
         int max = 1;
-        for (int i=1; i<nums.length; ++i){
-            for (int j=0; j<i; j++){
-                if (nums[j]<nums[i]){
+        for (int i=1; i<nums.length; ++i) {
+            for (int j=0; j<i; ++j) {
+                if (nums[j] < nums[i]) {
                     dp[i] = Math.max(dp[i],dp[j]+1);
                 }
             }

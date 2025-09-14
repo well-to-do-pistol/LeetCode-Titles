@@ -8,43 +8,25 @@ public class The_Longest_Substring_Without_Duplicate_Characters_3 {
 
 class Solution_3 {
 
-    // 3. 自己想的用队列+set实现滑窗
+    // 2. 用128的数组，数组保存索引
+    // 可以先用哈希表写
     // public int lengthOfLongestSubstring(String s) {
-    //     Set<Character> set = new HashSet<>();
-    //     Queue<Character> queue = new LinkedList<>();
-    //     int res=0;
-    //     for(char c:s.toCharArray()){
-    //         if(set.contains(c)){
-    //             while(!queue.isEmpty()){
-    //                 char t=queue.poll();
-    //                 set.remove(t);
-    //                 if(t==c)break;
+    //     int[] nums = new int[128];
+    //     Arrays.fill(nums,-1);
+    //     char[] chars = s.toCharArray();
+    //     int l=0,max=0;
+    //     for (int i=0; i<s.length(); ++i) {
+    //         char c = chars[i];
+    //         if (nums[c]>=0) {
+    //             while (l<=nums[c]) {
+    //                 nums[chars[l]]=0;
+    //                 ++l;
     //             }
     //         }
-    //         set.add(c);
-    //         queue.offer(c);
-    //         res=Math.max(queue.size(),res);
+    //         nums[c]=i;
+    //         max = Math.max(max,i-l+1);
     //     }
-    //     return res;
-    // }
-
-
-    // 2. 双指针+set (滑窗的模板)
-    // 只要set还有当前字符, 就一直弹出队列(左指针移动)
-    // public int lengthOfLongestSubstring(String s) {
-    //     int count=0, l=0, r=0, len=s.length();
-    //     char[] chars = s.toCharArray();
-    //     Set<Character> set = new HashSet<>();
-    //     while(r<len){
-    //         while(set.contains(chars[r])){
-    //             set.remove(chars[l]);
-    //             ++l;
-    //         }
-    //         set.add(chars[r]);
-    //         ++r;
-    //         count=Math.max(count,r-l);
-    //     }
-    //     return count;
+    //     return max;
     // }
 
     // 1. 双指针+数组(最快方法)

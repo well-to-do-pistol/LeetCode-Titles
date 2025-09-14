@@ -32,6 +32,7 @@ class Solution_42 {
 
 
     // 2.单调栈(单调递增)
+    // 必须用Deque，用Stack慢10ms慢很多
     // 找凹陷来算面积: (1)比栈顶小, 入栈(入的是索引); (2)等于, 跳过(入不入都一样, 入栈面积也会等于0, 因为我们只利用连续3个索引来算面积); (3)大于, 记录mid, 计算h为两边较小值, 宽为索引差-1
     // public int trap(int[] height) {
     //     Deque<Integer> stack = new LinkedList<Integer>();
