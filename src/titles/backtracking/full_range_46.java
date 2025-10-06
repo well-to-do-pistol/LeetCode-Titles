@@ -9,32 +9,32 @@ public class full_range_46 {
 
 class Solution_46 {
 
-    // 1. 标记数组法
+    // 1. 直接用标记数组就行了
     List<List<Integer>> res;
-    List<Integer> path;
+    List<Integer> buf;
     boolean[] visit;
-    int n;
     public List<List<Integer>> permute(int[] nums) {
-        n = nums.length;
         res = new ArrayList<>();
-        path = new ArrayList<>();
-        visit = new boolean[n];
-        backTracking(nums);
+        buf = new ArrayList<>();
+        visit = new boolean[nums.length];
+        backTracking(0,nums);
         return res;
     }
 
-    private void backTracking(int[] nums){
-        if(path.size()==n){
-            res.add(new ArrayList<>(path)); // path要重复利用，所以要new个新的
+    private void backTracking(int i, int[] nums) {
+        if (buf.size()==nums.length) {
+            res.add(new ArrayList<>(buf));
             return;
         }
-        for(int i=0; i<n; ++i){
-            if(visit[i])continue;
-            path.add(nums[i]);
-            visit[i]=true;
-            backTracking(nums);
-            visit[i]=false;
-            path.remove(path.size()-1);
+
+        for (int j=0; j<nums.length; ++j) {
+            if (visit[j])
+                continue;
+            buf.add(nums[j]);
+            visit[j] = true;
+            backTracking(j+1,nums);
+            visit[j] = false;
+            buf.remove(buf.size()-1);
         }
     }
 

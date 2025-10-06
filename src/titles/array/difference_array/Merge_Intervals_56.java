@@ -80,24 +80,24 @@ class Solution_56 {
     // }
 
 
-    // 2.使用栈(自己想的, 较慢)
-    // public int[][] merge(int[][] intervals) {
-    //     int n=intervals.length;
-    //     Arrays.sort(intervals, (a,b)->(a[0]-b[0]));
-    //     Stack<int[]> stack = new Stack<>();
-    //     stack.push(intervals[0]);
-    //     for(int i=1; i<n; ++i){
-    //         if(stack.peek()[1]>=intervals[i][0]){  //如果第一个数组的尾大于等于第二个数组的头
-    //             if(stack.peek()[1]>=intervals[i][1])continue;  //如果第一个数组的尾还大于等于第二个数组的尾则不用处理
-    //             stack.peek()[1]=intervals[i][1];
-    //         }else
-    //             stack.push(intervals[i]);
-    //     }
-    //     int len = stack.size();
-    //     int[][] res = new int[len][2];
-    //     for(int i=len-1; i>=0; --i){
-    //         res[i]=stack.pop();
-    //     }
-    //     return res;
-    // }
+    // 2.自己想的，跟最快写法稍微有点不同
+//    public int[][] merge(int[][] intervals) {
+//         List<int[]> res = new ArrayList<>();
+//         Arrays.sort(intervals,(a,b)->a[0]-b[0]);
+//         res.add(intervals[0]);
+//         for (int i=1; i<intervals.length; ++i) {
+//             int[] tmp = res.get(res.size()-1);
+//             if (intervals[i][0]>tmp[1]) {
+//                 res.add(intervals[i]);
+//             } else {
+//                 tmp[0] = Math.min(tmp[0],intervals[i][0]);
+//                 tmp[1] = Math.max(tmp[1],intervals[i][1]);
+//             }
+//         }
+//         int[][] result = new int[res.size()][2];
+//         for (int i=0; i<res.size(); ++i) {
+//             result[i] = res.get(i);
+//         }
+//         return result;
+//     }
 }
