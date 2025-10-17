@@ -7,31 +7,31 @@ public class Minimum_Covering_Substring_76 {
 
 class Solution_76 {
 
-    // 1. 双指针+数组形成滑动窗口
-    // 不是tMap里存在的字符直接跳过, 用count与tLen比较来判断是否包含了所有字符, 如果该字符的值小于等于tMap, 则++count
-    // 移动左指针的时候, 如果移去的是关键字符(在tMap里存在且sMap的值小于了tMap)则count-1
-    // 只有遇到关键元素(在tMap存在, 且在sMap加上或减去使得满足或不满足tMap所需值)才更新count
+    // 1. 最优滑窗写法
+    // 用count来记录匹配到数，count等于tLen就是成功
+    // 然后++l
+    // 不断判断当前tMap是否大于0
+    // 只有sMap<tMap时才++count
     public String minWindow(String s, String t) {
-        int l=0, r=0, ansL=-1, ansR=-1, sLen=s.length(), tLen=t.length(), len=Integer.MAX_VALUE, count=0;
-        char[] sChars = s.toCharArray();
-        char[] tChars = t.toCharArray();
-        int[] sMap = new int[128];
-        int[] tMap = new int[128];
-        for(char c:tChars)
+        int l=0, r=0, ansL=-1, min=Integer.MAX_VALUE, sLen=s.length(), tLen=t.length(), count=0;
+        char[] sChar = s.toCharArray();
+        char[] tChar = t.toCharArray();
+        char[] sMap = new char[128];
+        char[] tMap = new char[128];
+        for (char c:tChar)
             ++tMap[c];
-        while(r<sLen){
-            if(tMap[sChars[r]]>0){
-                ++sMap[sChars[r]];
-                if(sMap[sChars[r]]<=tMap[sChars[r]])
+        while (r<sLen) {
+            if (tMap[sChar[r]]>0) {
+                ++sMap[sChar[r]];
+                if (sMap[sChar[r]] <= tMap[sChar[r]])
                     ++count;
-                while(count==tLen){                                           //这里不用判断l<=r了, 因为count既然有长度, l就<=r
-                    if(r-l+1 < len){
-                        len = r-l+1;
-                        ansL = l;
-                        ansR = r+1;
+                while (count==tLen) {
+                    if (r-l+1<min) {
+                        min=r-l+1;
+                        ansL=l;
                     }
-                    --sMap[sChars[l]];
-                    if(tMap[sChars[l]]>0 && sMap[sChars[l]]<tMap[sChars[l]]){ //别忘了判断左指针的字符是否在tMap里
+                    --sMap[sChar[l]];                                           // 左移同时不要忘了删sMap
+                    if (tMap[sChar[l]]>0 && sMap[sChar[l]] < tMap[sChar[l]]) {  // 左边界左移，不能判断<=，等于证明还没删到关键的点
                         --count;
                     }
                     ++l;
@@ -39,7 +39,7 @@ class Solution_76 {
             }
             ++r;
         }
-        return ansL==-1 ? "" : s.substring(ansL,ansR);                //substring的s都是小写
+        return ansL==-1 ? "" : s.substring(ansL,ansL+min);
     }
 
 
